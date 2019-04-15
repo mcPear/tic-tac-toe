@@ -21,5 +21,4 @@ def play():
     game = Game(q_table)
     game.start()
 
-
 play()

@@ -28,7 +28,7 @@ class Game:
             if self.state.get_winner() is not None: return
 
     def q_table_move(self):
-        cell_idx = np.argmax(self.q_table[self.state])
+        cell_idx = np.nanargmax(self.q_table[self.state])
         print(self.state.board)
         print(cell_idx)
         x = cell_idx % 3
