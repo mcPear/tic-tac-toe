@@ -1,22 +1,19 @@
 import copy
+from state import GameState
 import numpy as np
 from step_controller import step
 
 actions_count = 9
 
 
-def get_q_table(state, iter_count=10000, lr=0.1, gamma=0.9):
-    # todo generate all ~400 possible states (board*turn), allow to start by user
-    q_table = dict()
+def get_q_table(q_table_empty, iter_count=10000, lr=0.5, gamma=1):
+    q_table = q_table_empty
+    state = GameState()
     for i in range(iter_count):
-        obs = copy.deepcopy(state)
+        obs = state
         game_over = False
         while not game_over:
-            add(obs, q_table)
-            cell_idx = choose_action(q_table, obs)
-
-            obs_ = step(obs, cell_idx)
-            add(obs_, q_table)
+            cell_idx, obs_ = choose_action(q_table, obs)
 
             winner = obs_.get_winner()
 
@@ -34,16 +31,19 @@ def get_q_table(state, iter_count=10000, lr=0.1, gamma=0.9):
                 q_table[obs][cell_idx] = (1 - lr) * q_table[obs][cell_idx] + lr * (
                         reward + gamma * np.nanmax(q_table[obs_]))
                 obs = obs_
-        if(i%500 == 0): print(i)
+        if (i % 500 == 0):
+            print(i)
+            print(len(q_table))
     return q_table
 
 
 def choose_action(q_table, obs):
-    values = q_table[obs]
+    value_obses = q_table[obs]
+    values = list(map(lambda v: v[0], value_obses))
     values_exp = np.exp(values)
     probs = np.nan_to_num(values_exp / np.nansum(values_exp))
-    action = np.random.choice(np.arange(len(values)), p=probs)
-    return action
+    action_idx = np.random.choice(np.arange(len(values)), p=probs)
+    return action_idx, value_obses[action_idx][0]
 
 
 def add(state, q_table):
