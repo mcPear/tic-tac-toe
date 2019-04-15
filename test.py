@@ -3,6 +3,7 @@ from q_learning import get_q_table
 import pickle
 from game import Game
 import q_table_gen
+from q_learning import get_q_table
 
 
 file = 'q_table.pickle'
@@ -17,10 +18,9 @@ def train():
         pickle.dump(q_table, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
 
-def play():
-    with open(file, 'rb') as handle:
-        q_table = pickle.load(handle)
+def play(q_table_empty):
 
+    q_table = get_q_table(q_table_empty)
     game = Game(q_table)
     game.start()
 
@@ -33,8 +33,8 @@ def load_empty_q_table():
         return pickle.load(handle)
 
 
-gen_empty_q_table()
+# gen_empty_q_table()
 q_table_empty = load_empty_q_table()
-print (q_table_empty)
+# print (q_table_empty)
 # train()
-# play()
+play(q_table_empty)

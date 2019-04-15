@@ -27,6 +27,8 @@ def step_states(state, cell_idx):
             y = cols[i]
             state_copy_2.board[x][y] = x if state_copy_2.turn == o else o
             return_states.append(state_copy_2)
+    else:
+        return_states.append(state_copy)
     return return_states
 
 
