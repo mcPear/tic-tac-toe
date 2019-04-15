@@ -1,24 +1,17 @@
 import numpy as np
 
+x = 1
+o = -1
+
 
 class GameState:
 
     def __init__(self):
         self.board = np.zeros((3, 3))
-        self.turn = False
-
-    def set_cross(self, x, y):
-        self.set_elem(x, y, 1)
-
-    def set_circle(self, x, y):
-        self.set_elem(x, y, -1)
-
-    def set_elem(self, x, y, elem):
-        self.board[x][y] = elem
+        self.turn = x
 
     def get_winner(self):
-        x = 'X'
-        o = 'O'
+        """ 1 is cross, -1 is circle, 0 is draw"""
         sum_ax_0 = np.sum(self.board, 0)
         if 3 in sum_ax_0: return x
         if -3 in sum_ax_0: return o
@@ -31,14 +24,13 @@ class GameState:
         sum_diag_1 = np.trace(self.board, 1)
         if 3 == sum_diag_1: return x
         if -3 == sum_diag_1: return o
+        if np.count_nonzero(self.board) == 9: return 0
 
+    def switch_turn(self):
+        self.turn = x if self.turn == o else o
 
-def test():
-    state = GameState()
-    state.set_circle(2, 2)
-    state.set_circle(1, 1)
-    state.set_circle(0, 0)
-    print(state.board.transpose())
-    print(state.get_winner())
+    def __eq__(self, other):
+        return type(self) is type(other) and self.turn == other.turn and np.array_equal(self.board, other.board)
 
-test()
+    def __hash__(self):
+        return hash(type(self)) + hash(self.turn) + hash(self.board.tostring())
