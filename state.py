@@ -18,10 +18,12 @@ class GameState:
         sum_ax_1 = np.sum(self.board, 1)
         if 3 in sum_ax_1: return x
         if -3 in sum_ax_1: return o
-        sum_diag_0 = np.trace(self.board, 0)
+        sum_diag_0 = np.trace(self.board)
+        print (sum_diag_0)
         if 3 == sum_diag_0: return x
         if -3 == sum_diag_0: return o
-        sum_diag_1 = np.trace(self.board, 1)
+        sum_diag_1 = np.trace(np.fliplr(self.board))
+        print (sum_diag_1)
         if 3 == sum_diag_1: return x
         if -3 == sum_diag_1: return o
         if np.count_nonzero(self.board) == 9: return 0
