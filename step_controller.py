@@ -23,9 +23,9 @@ def step_states(state, cell_idx):
         rows, cols = np.where(state_copy.board == 0)
         for i in range(len(rows)):
             state_copy_2 = copy.deepcopy(state_copy)
-            x = rows[i]
-            y = cols[i]
-            state_copy_2.board[x][y] = x if state_copy_2.turn == o else o
+            x_pos = rows[i]
+            y_pos = cols[i]
+            state_copy_2.board[x_pos][y_pos] = x if state_copy_2.turn == o else o
             return_states.append(state_copy_2)
     else:
         return_states.append(state_copy)
@@ -33,14 +33,14 @@ def step_states(state, cell_idx):
 
 
 def ai_move(state, cell_idx):
-    x = cell_idx % 3
-    y = cell_idx / 3
-    state.board[x][y] = state.turn
+    x_pos = cell_idx % 3
+    y_pos = cell_idx // 3
+    state.board[x_pos][y_pos] = state.turn
 
 
 def opponent_move(state):
     rows, cols = np.where(state.board == 0)
     i = np.random.randint(0, len(rows))
-    x = rows[i]
-    y = cols[i]
-    state.board[x][y] = x if state.turn == o else o
+    x_pos = rows[i]
+    y_pos = cols[i]
+    state.board[x_pos][y_pos] = x if state.turn == o else o

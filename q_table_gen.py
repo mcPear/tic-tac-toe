@@ -13,7 +13,7 @@ def get_q_table():
     while new_states:
         curr_new_states = []
         for i in range(len(new_states)):
-            print (i * 100 / len(new_states))
+            #print (i * 100 / len(new_states))
             state = new_states[i]
             values = q_table[state]
             for idx in range(len(values)):
@@ -31,5 +31,5 @@ def get_q_table():
 
 def add(state, q_table):
     if state not in q_table.keys():
-        values = [(0, None) if state.board[i % 3][i / 3] == 0 else (np.nan, None) for i in range(actions_count)]
+        values = [(0, None) if state.board[i % 3][i // 3] == 0 else (np.nan, None) for i in range(actions_count)]
         q_table[state] = values

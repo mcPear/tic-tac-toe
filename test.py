@@ -1,5 +1,8 @@
-from state import GameState
-from q_learning import get_q_table
+from collections import defaultdict
+
+from tqdm import tqdm
+
+from players.random_player import RandomPlayer
 import pickle
 from game import Game
 import q_table_gen
@@ -9,10 +12,10 @@ file = 'q_table.pickle'
 file_empty = 'q_table_empty.pickle'
 
 
-def play(q_table_empty):
+def play(q_table_empty, opponent=RandomPlayer(), draw=False):
     q_table = get_q_table(q_table_empty)
-    game = Game(q_table)
-    game.start()
+    game = Game(q_table, draw)
+    return game.start(opponent)
 
 
 def gen_empty_q_table():
@@ -25,5 +28,22 @@ def load_empty_q_table():
         return pickle.load(handle)
 
 
-q_table_empty = load_empty_q_table()
-play(q_table_empty)
+# gen_empty_q_table()
+
+#TODO extract to separate file
+repetitions = 100
+results = defaultdict(int)
+for _ in tqdm(range(0, repetitions)):
+    q_table_empty = load_empty_q_table()
+    result = play(q_table_empty)
+    # result_text = 'x' if result == 1 else ('o' if result == -1 else 'draw')
+    results[result] += 1
+
+#TODO extract to method
+all = sum(results.values())
+x = results[1]
+o = results[-1]
+d = results[0]
+print(f"X won {x} times {(x / all)*100}%")
+print(f"O won {o} times {(o / all)*100}%")
+print(f"draw {d} times {(d / all)*100}%")

@@ -10,7 +10,7 @@ def get_q_table(q_table_empty, iter_count=10000, lr=0.05, gamma=0.9):
     q_table = q_table_empty
     state = GameState()
     for i in range(iter_count):
-        print (q_table[state])
+        #print (q_table[state])
         obs = state
         game_over = False
         while not game_over:
@@ -32,9 +32,9 @@ def get_q_table(q_table_empty, iter_count=10000, lr=0.05, gamma=0.9):
                         reward + gamma * np.nanmax(list(map(lambda v: v[0], q_table[obs_])))), obs_)
                 obs = obs_
 
-        if (i % 500 == 0):
-            print(i)
-            print(len(q_table))
+        #if (i % 500 == 0):
+            #print(i)
+            #print(len(q_table))
     return q_table
 
 

@@ -1,42 +1,56 @@
 import pygame
 import numpy as np
+
+from players.human_player import HumanPlayer
 from state import GameState
 
 
 class Game:
 
-    def __init__(self, q_table, dim=400):
+    def __init__(self, q_table, do_draw, dim=400):
         self.q_table = q_table
         self.state = GameState()
         self.dim = dim
         self.section = dim / 3
         self.line_color = (30, 30, 30)
         self.line_width = 10
-        self.screen = pygame.display.set_mode((self.dim, self.dim))
+        self.do_draw = do_draw
+        self.screen = pygame.display.set_mode((self.dim, self.dim)) if do_draw else None
 
-    def start(self):
-        pygame.init()
-        self.draw_board()
+    def start(self, opponent):
+        if self.do_draw:
+            pygame.init()
+            self.draw_board()
 
         while 1:
             self.q_table_move()
             self.draw()
-            if self.state.get_winner() is not None: return
+            if self.state.get_winner() is not None: return self.end()
 
-            self.user_move()
+            if opponent is HumanPlayer:
+                self.user_move()
+            else:
+                opponent.perform_move(self.state)
+                self.state.switch_turn()
             self.draw()
-            if self.state.get_winner() is not None: return
+            if self.state.get_winner() is not None: return self.end()
+
+    def end(self):
+        return self.state.get_winner()
+        # pygame.display.quit()
+        # pygame.quit()
+        # sys.exit()
 
     def q_table_move(self):
-        print (self.q_table[self.state])
+        #print(self.q_table[self.state])
         cell_idx = np.nanargmax(list(map(lambda v: v[0], self.q_table[self.state])))
-        print(self.state.board)
-        print(cell_idx)
+        #print(self.state.board)
+        #print(cell_idx)
         x = cell_idx % 3
-        y = cell_idx / 3
+        y = cell_idx // 3
         self.state.board[x][y] = self.state.turn
-        print(self.state.board)
-        print ("")
+        #print(self.state.board)
+        #print("")
         self.state.switch_turn()
 
     def user_move(self):
@@ -49,12 +63,13 @@ class Game:
 
     def update_state_with_mouse(self):
         (x, y) = pygame.mouse.get_pos()
-        cell_x = x / self.section
-        cell_y = y / self.section
+        cell_x = int(x / self.section)
+        cell_y = int(y / self.section)
         self.state.board[cell_x][cell_y] = self.state.turn
         self.state.switch_turn()
 
     def draw(self):
+        if not self.do_draw: return
         cross_cols, cross_rows = np.where(self.state.board == 1)
         circle_cols, circle_rows = np.where(self.state.board == -1)
 
@@ -67,8 +82,9 @@ class Game:
 
     def draw_circle(self, cell_x, cell_y):
         pygame.draw.circle(self.screen, self.line_color,
-                           (cell_x * self.section + self.section / 2, cell_y * self.section + self.section / 2),
-                           self.section / 3, self.line_width)
+                           (int(cell_x * self.section + self.section / 2),
+                            int(cell_y * self.section + self.section / 2)),
+                           int(self.section / 3), self.line_width)
 
     def draw_cross(self, cell_x, cell_y):
         base_x = cell_x * self.section
@@ -82,8 +98,8 @@ class Game:
 
     def draw_element(self, turn):
         (x, y) = pygame.mouse.get_pos()
-        cell_x = x / self.section
-        cell_y = y / self.section
+        cell_x = x // self.section
+        cell_y = y // self.section
         if turn:
             self.draw_circle(cell_x, cell_y)
         else:

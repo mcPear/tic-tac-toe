@@ -19,17 +19,22 @@ class GameState:
         if 3 in sum_ax_1: return x
         if -3 in sum_ax_1: return o
         sum_diag_0 = np.trace(self.board)
-        print (sum_diag_0)
+        #print(sum_diag_0)
         if 3 == sum_diag_0: return x
         if -3 == sum_diag_0: return o
         sum_diag_1 = np.trace(np.fliplr(self.board))
-        print (sum_diag_1)
+        #print(sum_diag_1)
         if 3 == sum_diag_1: return x
         if -3 == sum_diag_1: return o
         if np.count_nonzero(self.board) == 9: return 0
 
     def switch_turn(self):
         self.turn = x if self.turn == o else o
+
+    def get_available_moves_indices(self):
+        return [(row_ind, col_ind) for row_ind, row in enumerate(self.board)
+                for col_ind, elem in enumerate(row)
+                if elem == 0]
 
     def __eq__(self, other):
         return type(self) is type(other) and self.turn == other.turn and np.array_equal(self.board, other.board)
