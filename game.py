@@ -5,33 +5,21 @@ from state import GameState
 
 class Game:
 
-    def __init__(self, q_table):
-        self.q_table = q_table
+    def __init__(self):
         self.state = GameState()
 
-    def start(self, opponent):
+    def start(self, player_1, player_2):
 
         while 1:
-            self.q_table_move()
+            player_1.perform_move(self.state)
             if self.state.get_winner() is not None:
                 return self.end()
-
-            opponent.perform_move(self.state)
             self.state.switch_turn()
+
+            player_2.perform_move(self.state)
             if self.state.get_winner() is not None:
                 return self.end()
+            self.state.switch_turn()
 
     def end(self):
         return self.state.get_winner()
-
-    def q_table_move(self):
-        # print(self.q_table[self.state])
-        cell_idx = np.nanargmax(list(map(lambda v: v[0], self.q_table[self.state])))
-        # print(self.state.board)
-        # print(cell_idx)
-        x = cell_idx % 3
-        y = cell_idx // 3
-        self.state.board[x][y] = self.state.turn
-        # print(self.state.board)
-        # print("")
-        self.state.switch_turn()
