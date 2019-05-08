@@ -12,9 +12,9 @@ file = 'q_table.pickle'
 file_empty = 'q_table_empty.pickle'
 
 
-def play(q_table_empty, opponent=RandomPlayer(), draw=False):
+def play(q_table_empty, opponent=RandomPlayer()):
     q_table = get_q_table(q_table_empty)
-    game = Game(q_table, draw)
+    game = Game(q_table)
     return game.start(opponent)
 
 
@@ -31,7 +31,7 @@ def load_empty_q_table():
 # gen_empty_q_table()
 
 #TODO extract to separate file
-repetitions = 100
+repetitions = 6
 results = defaultdict(int)
 for _ in tqdm(range(0, repetitions)):
     q_table_empty = load_empty_q_table()
