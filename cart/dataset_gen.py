@@ -8,9 +8,7 @@ actions_count = 9
 
 
 def get_dataset(iter_count=50000):
-    print("LOADING EMPTY Q-TABLE...")
     q_table_empty = load_empty_q_table()
-    print("CREATING DATASET...")
 
     state = GameState()
     state_x_as_first = state
@@ -35,8 +33,13 @@ def get_dataset(iter_count=50000):
     for s in states_x_as_second:
         play_from_state(s, x_as_second_iter_count, q_table, dataset)
 
-    return [state.board.flatten().tolist() + [stats[0] / (stats[0] + stats[1] + stats[2])] for state, stats in
-            dataset.items()]
+    dataset = [state.board.flatten().tolist() + [stats[0] / (stats[0] + stats[1] + stats[2])] for state, stats in
+               dataset.items()]
+
+    X = [e[0:-1] for e in dataset]
+    y = [e[-1] for e in dataset]
+
+    return X, y
 
 
 def play_from_state(state, iter_count, q_table, dataset):
