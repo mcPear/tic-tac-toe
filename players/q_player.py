@@ -1,5 +1,6 @@
 import random
 import numpy as np
+import state as game_state
 
 from players.player import Player
 
@@ -10,9 +11,15 @@ class QPlayer(Player):
         self.q_table = q_table
         super().__init__()
 
-    def perform_move(self, state): # fixme limit - q_player is always X in q_table
+    def perform_move(self, state, sign):  # fixme limit - q_player is always X in q_table
+        if sign != state.turn:
+            raise Exception(f"Turn ({state.turn}) is not corresponding to player sign ({sign})")
         # print(self.q_table[self.state])
+        if sign is not game_state.x:
+            state.negative_state()
         cell_idx = np.nanargmax(list(map(lambda v: v[0], self.q_table[state])))
+        if sign is not game_state.x:
+            state.negative_state()
         # print(self.state.board)
         # print(cell_idx)
         x = cell_idx % 3

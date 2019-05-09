@@ -8,6 +8,7 @@ class GameState:
 
     def __init__(self):
         self.board = np.zeros((3, 3))
+        self.negative_fun_vec = np.vectorize(lambda e: -e if e in [x,o] else e)
         self.turn = x
 
     def get_winner(self):
@@ -19,11 +20,11 @@ class GameState:
         if 3 in sum_ax_1: return x
         if -3 in sum_ax_1: return o
         sum_diag_0 = np.trace(self.board)
-        #print(sum_diag_0)
+        # print(sum_diag_0)
         if 3 == sum_diag_0: return x
         if -3 == sum_diag_0: return o
         sum_diag_1 = np.trace(np.fliplr(self.board))
-        #print(sum_diag_1)
+        # print(sum_diag_1)
         if 3 == sum_diag_1: return x
         if -3 == sum_diag_1: return o
         if np.count_nonzero(self.board) == 9: return 0
@@ -35,6 +36,20 @@ class GameState:
         return [(row_ind, col_ind) for row_ind, row in enumerate(self.board)
                 for col_ind, elem in enumerate(row)
                 if elem == 0]
+
+    def get_board_negative(self):
+        return self.negative_fun_vec(self.board)
+
+    def get_board_negative_as_list(self):
+        as_list = self.get_board_as_list()
+        return [-sign for sign in as_list]
+
+    def negative_state(self):
+        self.board = self.get_board_negative()
+        self.turn -= self.turn
+
+    def get_board_as_list(self):
+        return self.board.flatten().tolist()
 
     def __eq__(self, other):
         return type(self) is type(other) and self.turn == other.turn and np.array_equal(self.board, other.board)
