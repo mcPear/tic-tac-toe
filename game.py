@@ -8,7 +8,10 @@ class Game:
     def __init__(self):
         self.state = GameState()
 
-    def start(self, player_1, player_2):
+    def start(self, player_1, player_2, x_first):
+
+        if not x_first:
+            self.state.switch_turn()
 
         while 1:
             player_1.perform_move(self.state)
