@@ -10,17 +10,17 @@ from cart.regression import get_cart
 from cart.dataset_gen import get_dataset
 
 
-def play(player1, player2, x_first):
-    return Game().start(player1, player2, x_first)
+def play(playerX, playerO):
+    return Game().start(playerX, playerO)
 
 
 # TODO extract to separate file
-def test(player1, player2, x_first=True):
+def test(playerX, playerO):
     repetitions = 1000
     results = defaultdict(int)
 
     for _ in tqdm(range(0, repetitions)):
-        result = play(player1, player2, x_first)
+        result = play(playerX, playerO)
         # result_text = 'x' if result == 1 else ('o' if result == -1 else 'draw')
         results[result] += 1
 
@@ -43,7 +43,7 @@ def get_q_player():
 
 def get_cart_player():
     print("CREATING DATASET...")
-    X, y = get_dataset()
+    X, y = get_dataset(50000)
     print("FITTING CART...")
     cart = get_cart(X, y)
     return CartPlayer(cart)
@@ -52,7 +52,7 @@ def get_cart_player():
 q_player = get_q_player()
 cart_player = get_cart_player()
 print("TESTING...")
-test(q_player, RandomPlayer(), True)
-test(RandomPlayer(), q_player, False)
-test(cart_player, RandomPlayer(), True)
-test(RandomPlayer(), cart_player, False)
+test(q_player, RandomPlayer())
+test(RandomPlayer(), q_player)
+test(cart_player, RandomPlayer())
+test(RandomPlayer(), cart_player)
