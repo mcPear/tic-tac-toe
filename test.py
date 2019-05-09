@@ -30,11 +30,14 @@ def load_empty_q_table():
 # gen_empty_q_table()
 
 # TODO extract to separate file
-repetitions = 6
+repetitions = 1000
 results = defaultdict(int)
+print("LOADING EMPTY Q-TABLE...")
+q_table_empty = load_empty_q_table()
+print("FILLING Q-TABLE...")
+q_table = get_q_table(q_table_empty)
+print("TESTING...")
 for _ in tqdm(range(0, repetitions)):
-    q_table_empty = load_empty_q_table()
-    q_table = get_q_table(q_table_empty)
     result = play(QPlayer(q_table), RandomPlayer())
     # result_text = 'x' if result == 1 else ('o' if result == -1 else 'draw')
     results[result] += 1

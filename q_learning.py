@@ -9,7 +9,7 @@ def get_q_table(q_table_empty, iter_count=10000, lr=0.05, gamma=0.9):
     q_table = q_table_empty
     state = GameState()
     for i in range(iter_count):
-        #print (q_table[state])
+        # print (q_table[state])
         obs = state
         game_over = False
         while not game_over:
@@ -23,17 +23,18 @@ def get_q_table(q_table_empty, iter_count=10000, lr=0.05, gamma=0.9):
             else:
                 reward = -1
 
+            obses = q_table[obs][cell_idx][1]
             if winner is not None:
-                q_table[obs][cell_idx] = (reward, obs_)
+                q_table[obs][cell_idx] = (reward, obses)
                 game_over = True
             else:
                 q_table[obs][cell_idx] = ((1 - lr) * q_table[obs][cell_idx][0] + lr * (
-                        reward + gamma * np.nanmax(list(map(lambda v: v[0], q_table[obs_])))), obs_)
+                        reward + gamma * np.nanmax(list(map(lambda v: v[0], q_table[obs_])))), obses)
                 obs = obs_
 
-        #if (i % 500 == 0):
-            #print(i)
-            #print(len(q_table))
+        # if (i % 500 == 0):
+        # print(i)
+        # print(len(q_table))
     return q_table
 
 
@@ -43,5 +44,8 @@ def choose_action(q_table, obs):
     values_exp = np.exp(values)
     probs = np.nan_to_num(values_exp / np.nansum(values_exp))
     action_idx = np.random.choice(np.arange(len(values)), p=probs)
+    # todo consider using epsilon here to allow exploration
+    obses_possible_after_action = value_obses[action_idx][1]
+    obs_after_random_opponent_play = np.random.choice(obses_possible_after_action)
 
-    return action_idx, value_obses[action_idx][1]
+    return action_idx, obs_after_random_opponent_play

@@ -56,8 +56,8 @@ def extend_state(state, q_table, curr_new_states):
     for idx in range(len(values)):
         if values[idx][0] is not np.nan:
             gen_states = step_states(state, idx)
+            values[idx] = (values[idx][0], gen_states)
             for gen_state in gen_states:
-                values[idx] = (values[idx][0], gen_state)
                 add(gen_state, q_table)
                 if gen_state not in curr_new_states and gen_state.get_winner() is None:
                     curr_new_states.append(gen_state)
