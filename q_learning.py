@@ -1,7 +1,6 @@
 import copy
 from state import GameState
 import numpy as np
-from step_controller import step
 
 actions_count = 9
 

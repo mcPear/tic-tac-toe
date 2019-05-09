@@ -10,7 +10,7 @@ class QPlayer(Player):
         self.q_table = q_table
         super().__init__()
 
-    def perform_move(self, state):
+    def perform_move(self, state): # fixme limit - q_player is always X in q_table
         # print(self.q_table[self.state])
         cell_idx = np.nanargmax(list(map(lambda v: v[0], self.q_table[state])))
         # print(self.state.board)

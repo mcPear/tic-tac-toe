@@ -30,7 +30,7 @@ def load_empty_q_table():
 # gen_empty_q_table()
 
 # TODO extract to separate file
-repetitions = 20
+repetitions = 6
 results = defaultdict(int)
 for _ in tqdm(range(0, repetitions)):
     q_table_empty = load_empty_q_table()

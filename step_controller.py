@@ -6,15 +6,6 @@ o = game_state.o
 x = game_state.x
 
 
-def step(state, cell_idx):
-    state_copy = copy.deepcopy(state)
-    ai_move(state_copy, cell_idx)
-    if state_copy.get_winner() is None:
-        opponent_move(state_copy)
-    """ don't switch turn twice """
-    return state_copy
-
-
 def step_states(state, cell_idx):
     return_states = []
     state_copy = copy.deepcopy(state)
@@ -36,11 +27,3 @@ def ai_move(state, cell_idx):
     x_pos = cell_idx % 3
     y_pos = cell_idx // 3
     state.board[x_pos][y_pos] = state.turn
-
-
-def opponent_move(state):
-    rows, cols = np.where(state.board == 0)
-    i = np.random.randint(0, len(rows))
-    x_pos = rows[i]
-    y_pos = cols[i]
-    state.board[x_pos][y_pos] = x if state.turn == o else o
