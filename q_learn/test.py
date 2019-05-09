@@ -6,11 +6,11 @@ from players.random_player import RandomPlayer
 from players.q_player import QPlayer
 import pickle
 from game import Game
-import q_table_gen
-from q_learning import get_q_table
+from q_learn import q_table_gen
+from q_learn.q_learning import get_q_table
 
-file = 'q_table.pickle'
-file_empty = 'q_table_empty.pickle'
+file = 'q_learn/q_table.pickle'
+file_empty = 'q_learn/q_table_empty.pickle'
 
 
 def play(player1, player2, x_first):

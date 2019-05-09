@@ -1,5 +1,5 @@
 from state import GameState
-from step_controller import step_states
+from q_learn.step_controller import step_states
 import numpy as np
 import copy
 import state as game_state
