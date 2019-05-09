@@ -55,8 +55,8 @@ def extend_state(state, q_table, curr_new_states):
     values = q_table[state]
     for idx in range(len(values)):
         if values[idx][0] is not np.nan:
-            gen_states = step_states(state, idx)
-            values[idx] = (values[idx][0], gen_states)
+            gen_states, trans_state = step_states(state, idx)
+            values[idx] = (values[idx][0], gen_states, trans_state)
             for gen_state in gen_states:
                 add(gen_state, q_table)
                 if gen_state not in curr_new_states and gen_state.get_winner() is None:
@@ -65,5 +65,6 @@ def extend_state(state, q_table, curr_new_states):
 
 def add(state, q_table):
     if state not in q_table.keys():
-        values = [(0, None) if state.board[i % 3][i // 3] == 0 else (np.nan, None) for i in range(actions_count)]
+        values = [(0, None, None) if state.board[i % 3][i // 3] == 0 else (np.nan, None, None) for i in
+                  range(actions_count)]
         q_table[state] = values

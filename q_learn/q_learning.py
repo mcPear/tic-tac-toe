@@ -23,7 +23,7 @@ def get_q_table(q_table_empty, iter_count=10000, lr=0.05, gamma=0.9):
 
     x_as_first_iter_count = iter_count // 2
     x_as_second_iter_count = x_as_first_iter_count // actions_count
-    
+
     play_from_state(state_x_as_first, x_as_first_iter_count, lr, gamma, q_table)
     for s in states_x_as_second:
         play_from_state(s, x_as_second_iter_count, lr, gamma, q_table)
@@ -48,12 +48,13 @@ def play_from_state(state, iter_count, lr, gamma, q_table):
                 reward = -1
 
             obses = q_table[obs][cell_idx][1]
+            trans_state = q_table[obs][cell_idx][2]
             if winner is not None:
-                q_table[obs][cell_idx] = (reward, obses)
+                q_table[obs][cell_idx] = (reward, obses, trans_state)
                 game_over = True
             else:
                 q_table[obs][cell_idx] = ((1 - lr) * q_table[obs][cell_idx][0] + lr * (
-                        reward + gamma * np.nanmax(list(map(lambda v: v[0], q_table[obs_])))), obses)
+                        reward + gamma * np.nanmax(list(map(lambda v: v[0], q_table[obs_])))), obses, trans_state)
                 obs = obs_
 
         # if (i % 500 == 0):

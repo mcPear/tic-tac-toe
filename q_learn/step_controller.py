@@ -20,7 +20,7 @@ def step_states(state, cell_idx):
             return_states.append(state_copy_2)
     else:
         return_states.append(state_copy)
-    return return_states
+    return return_states, state_copy
 
 
 def ai_move(state, cell_idx):
