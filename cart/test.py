@@ -1,16 +1,11 @@
+from cart.regression import get_cart
 from cart.dataset_gen import get_dataset
-import pickle
 
-file_empty = '../q_learn/q_table_empty.pickle'
+dataset = get_dataset(10000)
+X = [e[0:-1] for e in dataset]
+y = [e[-1] for e in dataset]
+cart = get_cart(X, y)
+pred = cart.predict(X)
 
-
-def load_empty_q_table():
-    with open(file_empty, 'rb') as handle:
-        return pickle.load(handle)
-
-
-print("LOADING EMPTY Q-TABLE...")
-q_table_empty = load_empty_q_table()
-print("CREATING DATASET...")
-dataset = get_dataset(q_table_empty)
-print(len(dataset))
+for i in range(len(dataset)):
+    print(f"{dataset[i][-1]} | {pred[i]}")

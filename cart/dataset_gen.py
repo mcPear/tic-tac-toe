@@ -2,11 +2,16 @@ import copy
 from state import GameState
 import numpy as np
 import state as game_state
+from q_table_manager import load_empty_q_table
 
 actions_count = 9
 
 
-def get_dataset(q_table_empty, iter_count=50000):
+def get_dataset(iter_count=50000):
+    print("LOADING EMPTY Q-TABLE...")
+    q_table_empty = load_empty_q_table()
+    print("CREATING DATASET...")
+
     state = GameState()
     state_x_as_first = state
     states_x_as_second = []
