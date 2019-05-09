@@ -1,13 +1,37 @@
 import copy
 from state import GameState
 import numpy as np
+import state as game_state
 
 actions_count = 9
 
 
 def get_q_table(q_table_empty, iter_count=10000, lr=0.05, gamma=0.9):
-    q_table = q_table_empty
     state = GameState()
+    state_x_as_first = state
+    states_x_as_second = []
+
+    rows, cols = np.where(state.board == 0)
+    for i in range(len(rows)):
+        state_copy = copy.deepcopy(state)
+        x_pos = rows[i]
+        y_pos = cols[i]
+        state_copy.board[x_pos][y_pos] = game_state.o
+        states_x_as_second.append(state_copy)
+
+    q_table = q_table_empty
+
+    x_as_first_iter_count = iter_count // 2
+    x_as_second_iter_count = x_as_first_iter_count // actions_count
+    
+    play_from_state(state_x_as_first, x_as_first_iter_count, lr, gamma, q_table)
+    for s in states_x_as_second:
+        play_from_state(s, x_as_second_iter_count, lr, gamma, q_table)
+
+    return q_table
+
+
+def play_from_state(state, iter_count, lr, gamma, q_table):
     for i in range(iter_count):
         # print (q_table[state])
         obs = state
@@ -35,7 +59,6 @@ def get_q_table(q_table_empty, iter_count=10000, lr=0.05, gamma=0.9):
         # if (i % 500 == 0):
         # print(i)
         # print(len(q_table))
-    return q_table
 
 
 def choose_action(q_table, obs):
