@@ -3,6 +3,7 @@ from state import GameState
 import numpy as np
 import state as game_state
 from q_table_manager import load_empty_q_table
+from tqdm import tqdm
 
 actions_count = 9
 
@@ -29,7 +30,6 @@ def get_dataset(iter_count=50000):
     x_as_second_iter_count = x_as_first_iter_count // actions_count
 
     play_from_state(state_x_as_first, x_as_first_iter_count, q_table, dataset)
-    print("50%")
     for s in states_x_as_second:
         play_from_state(s, x_as_second_iter_count, q_table, dataset)
 
@@ -43,7 +43,7 @@ def get_dataset(iter_count=50000):
 
 
 def play_from_state(state, iter_count, q_table, dataset):
-    for i in range(iter_count):
+    for _ in tqdm(range(iter_count)):
         # print (q_table[state])
 
         obs = state

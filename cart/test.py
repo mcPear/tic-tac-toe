@@ -6,4 +6,4 @@ cart = get_cart(X, y)
 pred = cart.predict(X)
 
 for i in range(len(y)):
-    print(f"{y[i][-1]} | {pred[i]}")
+    print(f"{y[i]} | {pred[i]}")
