@@ -4,11 +4,12 @@ import numpy as np
 import state as game_state
 from q_table_manager import load_empty_q_table
 from tqdm import tqdm
+import pandas as pd
 
 actions_count = 9
 
 
-def get_dataset(iter_count=50000):
+def get_dataset(iter_count=50000, merge=False):
     q_table_empty = load_empty_q_table()
 
     state = GameState()
@@ -39,7 +40,16 @@ def get_dataset(iter_count=50000):
     X = [e[0:-1] for e in dataset]
     y = [e[-1] for e in dataset]
 
-    return X, y
+    if merge:
+        return merge_data_w_label(X, y)
+    else:
+        return X, y
+
+
+def merge_data_w_label(X, y):
+    data = pd.DataFrame(X)
+    data['outcome'] = y
+    return data
 
 
 def play_from_state(state, iter_count, q_table, dataset):

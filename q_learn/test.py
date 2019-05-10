@@ -16,7 +16,7 @@ def play(playerX, playerO):
 
 # TODO extract to separate file
 def test(playerX, playerO):
-    repetitions = 1000
+    repetitions = 50000
     results = defaultdict(int)
 
     for _ in tqdm(range(0, repetitions)):
@@ -28,7 +28,7 @@ def test(playerX, playerO):
     x = results[1]
     o = results[-1]
     d = results[0]
-    print(f"X won {x} times {(x / all) * 100}%")
+    print(f"\nX won {x} times {(x / all) * 100}%")
     print(f"O won {o} times {(o / all) * 100}%")
     print(f"draw {d} times {(d / all) * 100}%")
 
@@ -43,7 +43,7 @@ def get_q_player():
 
 def get_cart_player():
     print("CREATING DATASET...")
-    X, y = get_dataset(50000)
+    X, y = get_dataset(100000)
     print("FITTING CART...")
     cart = get_cart(X, y)
     return CartPlayer(cart)
@@ -51,8 +51,9 @@ def get_cart_player():
 
 q_player = get_q_player()
 cart_player = get_cart_player()
-print("TESTING...")
+print("TESTING Q-LEARN...\n")
 test(q_player, RandomPlayer())
 test(RandomPlayer(), q_player)
+print("TESTING CART...\n")
 test(cart_player, RandomPlayer())
 test(RandomPlayer(), cart_player)

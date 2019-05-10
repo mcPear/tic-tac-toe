@@ -39,18 +39,17 @@ def train(n_folds, data, cart):
         # calc MSE
         pred = cart.predict(test.iloc[:, :-1])
         actual = test.iloc[:, -1]
-        mse = np.mean((actual - pred) ** 2)
-        if mse < best_err:
-            best_err = mse
+        mae = np.mean(np.absolute(actual - pred))
+        if mae < best_err:
+            best_err = mae
             best_model = cart
-        errs.append(mse)
+        errs.append(mae)
 
     return errs, best_model, best_err  # delete errs from return
 
 
-
 ### PARAMETERS ANALYSIS, DELETE AFTER TWEAKING MODEL
-def analyze(model):
+def analyze(model, data):
     model_errs = []
     analyzed_range = range(1, 30)
     for i in analyzed_range:
@@ -63,13 +62,14 @@ def analyze(model):
     plt.show()
 
 
-X, y = get_dataset(100000)
-print(f"X: {len(X)} y: {len(y)}")
-data = pd.DataFrame(X)
-data['outcome'] = y
+def test():
+    data = get_dataset(100000, merge=True)
+    print(f"data_length: {len(data)}")
+    # data = pd.DataFrame(X)
+    # data['outcome'] = y
 
-analyze(lambda i: tree.DecisionTreeRegressor(min_samples_leaf=i))
-analyze(lambda i: tree.DecisionTreeRegressor(max_depth=i))
+    analyze(lambda i: tree.DecisionTreeRegressor(criterion="mae", min_samples_leaf=i), data)
+    analyze(lambda i: tree.DecisionTreeRegressor(criterion="mae", max_depth=i), data)
 
 # TODO:
 # - serialize best model
