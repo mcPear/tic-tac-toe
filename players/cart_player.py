@@ -21,7 +21,7 @@ class CartPlayer(Player):
             state_copy = copy.deepcopy(state)
             x_pos = rows[i]
             y_pos = cols[i]
-            state_copy.board[x_pos][y_pos] = game_state.x
+            state_copy.board[x_pos][y_pos] = sign
             state_as_list = state_copy.get_board_as_list() if sign == game_state.x else state_copy.get_board_negative_as_list()
             prediction = self.cart.predict([state_as_list])
             solutions.append(Solution(state_copy, x_pos, y_pos, prediction))
