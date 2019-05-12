@@ -28,4 +28,4 @@ class CartPlayer(Player):
 
         max_solution = max(solutions, key=attrgetter('prediction'))
 
-        state.board[max_solution.pos_x][max_solution.pos_x] = state.turn
+        state.board[max_solution.pos_x][max_solution.pos_y] = sign

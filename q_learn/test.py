@@ -28,7 +28,8 @@ def test(playerX, playerO):
     x = results[1]
     o = results[-1]
     d = results[0]
-    print(f"\nX won {x} times {(x / all) * 100}%")
+    print(f"\n{playerX.__class__.__name__} as X vs. {playerO.__class__.__name__} as O")
+    print(f"X won {x} times {(x / all) * 100}%")
     print(f"O won {o} times {(o / all) * 100}%")
     print(f"draw {d} times {(d / all) * 100}%")
 
@@ -51,9 +52,10 @@ def get_cart_player():
 
 q_player = get_q_player()
 cart_player = get_cart_player()
-print("TESTING Q-LEARN...\n")
-test(q_player, RandomPlayer())
-test(RandomPlayer(), q_player)
-print("TESTING CART...\n")
+print("TESTING...")
+test(q_player, cart_player)
+test(cart_player, q_player)
 test(cart_player, RandomPlayer())
 test(RandomPlayer(), cart_player)
+test(q_player, RandomPlayer())
+test(RandomPlayer(), q_player)

@@ -21,4 +21,4 @@ class QPlayer(Player):
             state.negative_state()
         x = cell_idx % 3
         y = cell_idx // 3
-        state.board[x][y] = state.turn
+        state.board[x][y] = sign
