@@ -1,7 +1,6 @@
 from collections import defaultdict
 from tqdm import tqdm
 from players.random_player import RandomPlayer
-from players.loss_avoiding_player import LossAvoidingPlayer
 from players.win_selecting_player import WinSelectingPlayer
 from players.q_player import QPlayer
 from players.cart_player import CartPlayer
@@ -14,7 +13,7 @@ def play(playerX, playerO):
 
 # TODO extract to separate file
 def test(playerX, playerO):
-    repetitions = 500
+    repetitions = 100
     results = defaultdict(int)
 
     for _ in tqdm(range(0, repetitions)):
@@ -33,7 +32,6 @@ def test(playerX, playerO):
 
 
 random_player = RandomPlayer()
-loss_avoiding_player = LossAvoidingPlayer()
 win_selecting_player = WinSelectingPlayer()
 q_player = QPlayer(win_selecting_player)
 cart_player = CartPlayer(100000, win_selecting_player)
