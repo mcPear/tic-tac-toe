@@ -13,7 +13,7 @@ def play(playerX, playerO):
 
 # TODO extract to separate file
 def test(playerX, playerO):
-    repetitions = 50000
+    repetitions = 500
     results = defaultdict(int)
 
     for _ in tqdm(range(0, repetitions)):
@@ -32,7 +32,7 @@ def test(playerX, playerO):
 
 
 q_player = QPlayer(random_agent)
-cart_player = CartPlayer(100000)
+cart_player = CartPlayer(100000, random_agent)
 print("TESTING...")
 test(q_player, cart_player)
 test(cart_player, q_player)
