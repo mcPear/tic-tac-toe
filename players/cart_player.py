@@ -10,8 +10,8 @@ from cart.dataset_gen import get_dataset
 
 class CartPlayer(Player):
 
-    def __init__(self, iter_count, agent_fun):
-        self.cart = self.create_cart(iter_count, agent_fun)
+    def __init__(self, iter_count, agent):
+        self.cart = self.create_cart(iter_count, agent)
         super().__init__()
 
     def perform_move(self, state, sign):
@@ -32,8 +32,8 @@ class CartPlayer(Player):
 
         state.board[max_solution.pos_x][max_solution.pos_y] = sign
 
-    def create_cart(self, iter_count, agent_fun):
+    def create_cart(self, iter_count, agent):
         print("CREATING DATASET...")
-        X, y = get_dataset(agent_fun, iter_count=iter_count)
+        X, y = get_dataset(agent, iter_count=iter_count)
         print("FITTING CART...")
         return get_cart(X, y)

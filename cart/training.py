@@ -5,7 +5,7 @@ from sklearn import tree
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-from q_learn.agents import random_agent
+from players.random_player import RandomPlayer
 
 
 # TODO extract methods ?
@@ -64,7 +64,7 @@ def analyze(model, data):
 
 
 def test():
-    data = get_dataset(random_agent, 100000, merge=True)
+    data = get_dataset(RandomPlayer(), 100000, merge=True)
     print(f"data_length: {len(data)}")
     # data = pd.DataFrame(X)
     # data['outcome'] = y

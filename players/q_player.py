@@ -7,8 +7,8 @@ from players.player import Player
 
 class QPlayer(Player):
 
-    def __init__(self, agent_fun):
-        self.q_table = self.create_q_table(agent_fun)
+    def __init__(self, agent):
+        self.q_table = self.create_q_table(agent)
         super().__init__()
 
     def perform_move(self, state, sign):
@@ -23,8 +23,8 @@ class QPlayer(Player):
         y = cell_idx // 3
         state.board[x][y] = sign
 
-    def create_q_table(self, agent_fun):
+    def create_q_table(self, agent):
         print("LOADING EMPTY Q-TABLE...")
         q_table_empty = load_empty_q_table()
         print("FILLING Q-TABLE...")
-        return get_q_table(q_table_empty, agent_fun)
+        return get_q_table(q_table_empty, agent)
