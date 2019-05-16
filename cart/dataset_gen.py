@@ -30,9 +30,9 @@ def get_dataset(agent_fun, iter_count=50000, merge=False):
     x_as_first_iter_count = iter_count // 2
     x_as_second_iter_count = x_as_first_iter_count // actions_count
 
-    play_from_state(state_x_as_first, x_as_first_iter_count, q_table, dataset, agent_fun)
+    play_from_state(state_x_as_first, x_as_first_iter_count, q_table, dataset, agent_fun, game_state.o)
     for s in states_x_as_second:
-        play_from_state(s, x_as_second_iter_count, q_table, dataset, agent_fun)
+        play_from_state(s, x_as_second_iter_count, q_table, dataset, agent_fun, game_state.x)
 
     dataset = [state.board.flatten().tolist() + [stats[0] / (stats[0] + stats[1] + stats[2])] for state, stats in
                dataset.items()]
@@ -52,7 +52,7 @@ def merge_data_w_label(X, y):
     return data
 
 
-def play_from_state(state, iter_count, q_table, dataset, agent_fun):
+def play_from_state(state, iter_count, q_table, dataset, agent_fun, opponent_sign):
     for _ in tqdm(range(iter_count)):
         # print (q_table[state])
 
@@ -60,7 +60,7 @@ def play_from_state(state, iter_count, q_table, dataset, agent_fun):
         game_over = False
         trans_states_sequence = []
         while not game_over:
-            cell_idx, obs_, trans_state = choose_action(q_table, obs, agent_fun)
+            cell_idx, obs_, trans_state = choose_action(q_table, obs, agent_fun, opponent_sign)
 
             trans_states_sequence.append(trans_state)
             winner = obs_.get_winner()
@@ -99,12 +99,12 @@ def handle_result(result, trans_states_sequence, dataset):  # todo symmetry
         dataset[state] = (wins, draws, looses)
 
 
-def choose_action(q_table, obs, agent_fun):
+def choose_action(q_table, obs, agent_fun, opponent_sign):
     value_obses = q_table[obs]
     values = list(map(lambda v: v[0], value_obses))
     action_idx = np.random.choice(np.argwhere(~np.isnan(values)).flatten())
     obses_possible_after_action = value_obses[action_idx][1]
     trans_state = value_obses[action_idx][2]
-    obs_after_random_opponent_play = agent_fun(trans_state, obses_possible_after_action)
+    obs_after_random_opponent_play = agent_fun(trans_state, obses_possible_after_action, opponent_sign)
 
     return action_idx, obs_after_random_opponent_play, trans_state
