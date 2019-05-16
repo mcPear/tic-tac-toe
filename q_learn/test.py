@@ -1,6 +1,7 @@
 from collections import defaultdict
 from tqdm import tqdm
 from players.random_player import RandomPlayer
+from players.loss_avoiding_player import LossAvoidingPlayer
 from players.q_player import QPlayer
 from players.cart_player import CartPlayer
 from game import Game
@@ -31,11 +32,12 @@ def test(playerX, playerO):
 
 
 random_player = RandomPlayer()
-q_player = QPlayer(random_player)
-cart_player = CartPlayer(5000, random_player)
+loss_avoiding_player = LossAvoidingPlayer()
+q_player = QPlayer(loss_avoiding_player)
+cart_player = CartPlayer(100000, loss_avoiding_player)
 print("TESTING...")
-test(q_player, cart_player)
-test(cart_player, q_player)
+test(loss_avoiding_player, cart_player)
+test(loss_avoiding_player, q_player)
 test(cart_player, random_player)
 test(random_player, cart_player)
 test(q_player, RandomPlayer())

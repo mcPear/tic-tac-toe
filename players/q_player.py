@@ -22,6 +22,7 @@ class QPlayer(Player):
         x = cell_idx % 3
         y = cell_idx // 3
         state.board[x][y] = sign
+        return state
 
     def create_q_table(self, agent):
         print("LOADING EMPTY Q-TABLE...")
