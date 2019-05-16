@@ -1,14 +1,14 @@
-import random
 import numpy as np
 import state as game_state
-
+from q_learn.q_learning import get_q_table
+from q_table_manager import load_empty_q_table
 from players.player import Player
 
 
 class QPlayer(Player):
 
-    def __init__(self, q_table):
-        self.q_table = q_table
+    def __init__(self):
+        self.q_table = self.create_q_table()
         super().__init__()
 
     def perform_move(self, state, sign):
@@ -22,3 +22,9 @@ class QPlayer(Player):
         x = cell_idx % 3
         y = cell_idx // 3
         state.board[x][y] = sign
+
+    def create_q_table(self):
+        print("LOADING EMPTY Q-TABLE...")
+        q_table_empty = load_empty_q_table()
+        print("FILLING Q-TABLE...")
+        return get_q_table(q_table_empty)

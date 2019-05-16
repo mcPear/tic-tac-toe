@@ -4,12 +4,14 @@ import state as game_state
 from cart.solution import Solution
 from players.player import Player
 from operator import attrgetter
+from cart.regression import get_cart
+from cart.dataset_gen import get_dataset
 
 
 class CartPlayer(Player):
 
-    def __init__(self, cart):
-        self.cart = cart
+    def __init__(self, iter_count):
+        self.cart = self.create_cart(iter_count)
         super().__init__()
 
     def perform_move(self, state, sign):
@@ -29,3 +31,9 @@ class CartPlayer(Player):
         max_solution = max(solutions, key=attrgetter('prediction'))
 
         state.board[max_solution.pos_x][max_solution.pos_y] = sign
+
+    def create_cart(self, iter_count):
+        print("CREATING DATASET...")
+        X, y = get_dataset(iter_count)
+        print("FITTING CART...")
+        return get_cart(X, y)
