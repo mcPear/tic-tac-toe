@@ -3,7 +3,7 @@ import numpy as np
 from players.player import Player
 
 
-class LossAvoidingPlayer(Player):
+class WinSelectingPlayer(Player):
 
     def __init__(self):
         super().__init__()
@@ -18,4 +18,7 @@ class LossAvoidingPlayer(Player):
         states_without_loss = list(filter(lambda s: s.get_winner() is not -sign, possible_states))
         if states_without_loss:
             possible_states = states_without_loss
+        win_states = list(filter(lambda s: s.get_winner() is sign, possible_states))
+        if win_states:
+            possible_states = win_states
         return random.choice(possible_states)
