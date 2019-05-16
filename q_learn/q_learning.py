@@ -6,7 +6,7 @@ import state as game_state
 actions_count = 9
 
 
-def get_q_table(q_table_empty, iter_count=10000, lr=0.05, gamma=0.9):
+def get_q_table(q_table_empty, agent_fun, iter_count=10000, lr=0.05, gamma=0.9):
     state = GameState()
     state_x_as_first = state
     states_x_as_second = []
@@ -24,20 +24,20 @@ def get_q_table(q_table_empty, iter_count=10000, lr=0.05, gamma=0.9):
     x_as_first_iter_count = iter_count // 2
     x_as_second_iter_count = x_as_first_iter_count // actions_count
 
-    play_from_state(state_x_as_first, x_as_first_iter_count, lr, gamma, q_table)
+    play_from_state(state_x_as_first, x_as_first_iter_count, lr, gamma, q_table, agent_fun)
     for s in states_x_as_second:
-        play_from_state(s, x_as_second_iter_count, lr, gamma, q_table)
+        play_from_state(s, x_as_second_iter_count, lr, gamma, q_table, agent_fun)
 
     return q_table
 
 
-def play_from_state(state, iter_count, lr, gamma, q_table):
+def play_from_state(state, iter_count, lr, gamma, q_table, agent_fun):
     for i in range(iter_count):
         # print (q_table[state])
         obs = state
         game_over = False
         while not game_over:
-            cell_idx, obs_ = choose_action(q_table, obs)
+            cell_idx, obs_ = choose_action(q_table, obs, agent_fun)
             winner = obs_.get_winner()
 
             if winner == state.turn:
@@ -62,7 +62,7 @@ def play_from_state(state, iter_count, lr, gamma, q_table):
         # print(len(q_table))
 
 
-def choose_action(q_table, obs):
+def choose_action(q_table, obs, agent_fun):
     value_obses = q_table[obs]
     values = list(map(lambda v: v[0], value_obses))
     values_exp = np.exp(values)
@@ -70,6 +70,7 @@ def choose_action(q_table, obs):
     action_idx = np.random.choice(np.arange(len(values)), p=probs)
     # todo consider using epsilon here to allow exploration
     obses_possible_after_action = value_obses[action_idx][1]
-    obs_after_random_opponent_play = np.random.choice(obses_possible_after_action)
+    obs_after_action = value_obses[action_idx][2]
+    obs_after_random_opponent_play = agent_fun(obs_after_action, obses_possible_after_action)
 
     return action_idx, obs_after_random_opponent_play

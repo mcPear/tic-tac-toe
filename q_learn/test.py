@@ -4,6 +4,7 @@ from players.random_player import RandomPlayer
 from players.q_player import QPlayer
 from players.cart_player import CartPlayer
 from game import Game
+from q_learn.agents import random_agent
 
 
 def play(playerX, playerO):
@@ -30,7 +31,7 @@ def test(playerX, playerO):
     print(f"draw {d} times {(d / all) * 100}%")
 
 
-q_player = QPlayer()
+q_player = QPlayer(random_agent)
 cart_player = CartPlayer(100000)
 print("TESTING...")
 test(q_player, cart_player)
