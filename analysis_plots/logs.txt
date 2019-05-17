@@ -1,0 +1,22 @@
+QPlayer as X vs. CartPlayer as O
+X won 2204 times 22.040000000000003%
+O won 7796 times 77.96%
+draw 0 times 0.0%
+100%|----------| 10000/10000 [00:12<00:00, 804.26it/s]
+CartPlayer as X vs. QPlayer as O
+X won 10000 times 100.0%
+O won 0 times 0.0%
+draw 0 times 0.0%
+
+
+
+
+QPlayer as X vs. CartPlayer as O
+X won 2246 times 22.46%
+O won 7754 times 77.53999999999999%
+draw 0 times 0.0%
+100%|----------| 10000/10000 [00:12<00:00, 812.33it/s]
+CartPlayer as X vs. QPlayer as O
+X won 10000 times 100.0%
+O won 0 times 0.0%
+draw 0 times 0.0%

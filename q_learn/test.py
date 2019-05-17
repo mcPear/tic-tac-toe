@@ -32,20 +32,17 @@ def test(playerX, playerO):
 
 
 
+# random_player = RandomPlayer()
+# win_selecting_player = WinSelectingPlayer()
+# q_player_random = QPlayer(random_player)
+# cart_player_random = CartPlayer(100000, random_player)
+#
+# test(q_player_random, cart_player_random)
+# test(cart_player_random, q_player_random)
+
 random_player = RandomPlayer()
 win_selecting_player = WinSelectingPlayer()
-q_player_random = QPlayer(random_player)
 cart_player_random = CartPlayer(100000, random_player)
-
-test(q_player_random, cart_player_random)
-test(cart_player_random, q_player_random)
-
-
-
-
-
-
-
 q_player_random = QPlayer(random_player)
 # cart_player_random = CartPlayer(100000, random_player) #todo change
 
