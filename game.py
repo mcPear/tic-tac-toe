@@ -1,3 +1,5 @@
+import random
+
 import numpy as np
 
 from state import GameState
@@ -9,7 +11,14 @@ class Game:
     def __init__(self):
         self.state = GameState()
 
-    def start(self, playerX, playerO):
+    def start(self, playerX, playerO, randomize_first=False):
+
+        if randomize_first:
+            self.state.board[random.choice(range(3))][random.choice(range(3))] = game_state.x
+            self.state.switch_turn()
+            playerO.perform_move(self.state, game_state.o)
+            self.state.switch_turn()
+
         # print("#################STARTING#################")
         # print(f"X: {playerX}, O: {playerO}")
         while 1:
