@@ -50,12 +50,12 @@ def train(n_folds, data, cart):
 
 
 ### PARAMETERS ANALYSIS, DELETE AFTER TWEAKING MODEL
-def analyze(model, data):
+def analyze(model, data, folds=None):
     model_errs = []
-    analyzed_range = range(1, 30)
+    analyzed_range = range(1, 100)
     for i in analyzed_range:
         print(f"Evaluating param: {i}")
-        errs, best_model, best_err = train(5, data, model(i))
+        errs, best_model, best_err = train(5 if folds is None else i, data, model(i))
         mean_err = np.mean(errs)
         model_errs.append(mean_err)
         print(f"Best model's error: {best_err}")
@@ -69,10 +69,12 @@ def test():
     # data = pd.DataFrame(X)
     # data['outcome'] = y
 
-    analyze(lambda i: tree.DecisionTreeRegressor(criterion="mae", min_samples_leaf=i), data)
-    analyze(lambda i: tree.DecisionTreeRegressor(criterion="mae", max_depth=i), data)
+    # analyze(lambda i: tree.DecisionTreeRegressor(criterion="mae", max_depth=10, min_samples_leaf=6), data)
+    # analyze(lambda i: tree.DecisionTreeRegressor(criterion="mae", max_depth=i), data)
+    # analyze(lambda i: tree.DecisionTreeRegressor(criterion="mae", min_samples_leaf=i), data)
+    analyze(lambda i: tree.DecisionTreeRegressor(criterion="mae", max_leaf_nodes=i+1), data)
 
-# TODO:
+# test()
 # - serialize best model
 # - read serialized model on cart agent creation
 # - analyze for parameter's best value: max_depth, min_samples_leaf. Can also pass a factor instead of int

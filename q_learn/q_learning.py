@@ -6,7 +6,7 @@ import state as game_state
 actions_count = 9
 
 
-def get_q_table(q_table_empty, agent, iter_count=10000, lr=0.05, gamma=0.9):
+def get_q_table(q_table_empty, agent, iter_count, lr, gamma):
     state = GameState()
     state_x_as_first = state
     states_x_as_second = []
@@ -64,6 +64,8 @@ def play_from_state(state, iter_count, lr, gamma, q_table, agent, opponent_sign)
 
 def choose_action(q_table, obs, agent, opponent_sign):
     value_obses = q_table[obs]
+    # TODO q_table has invalid entries
+    #value_obses = [curr for curr in value_obses if curr[2] is not None and curr[2].is_valid_for(opponent_sign)]
     values = list(map(lambda v: v[0], value_obses))
     values_exp = np.exp(values)
     probs = np.nan_to_num(values_exp / np.nansum(values_exp))
@@ -71,6 +73,7 @@ def choose_action(q_table, obs, agent, opponent_sign):
     # todo consider using epsilon here to allow exploration
     obses_possible_after_action = value_obses[action_idx][1]
     obs_after_action = value_obses[action_idx][2]
-    obs_after_random_opponent_play = agent.perform_move(obs_after_action, opponent_sign, obses_possible_after_action)
+    obs_after_random_opponent_play = agent.perform_move(obs_after_action, opponent_sign, obses_possible_after_action,
+                                                        validate=False)
 
     return action_idx, obs_after_random_opponent_play

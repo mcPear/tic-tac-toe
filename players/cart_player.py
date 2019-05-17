@@ -14,24 +14,36 @@ class CartPlayer(Player):
         self.cart = self.create_cart(iter_count, agent)
         super().__init__()
 
-    def perform_move(self, state, sign):
-        if sign != state.turn:
+    # possible_moves and curr_action for interoperability with qlearning
+    def perform_move(self, state, sign, possible_moves=None, validate=True):
+        if validate and sign != state.turn:
             raise Exception(f"Turn ({state.turn}) is not corresponding to player sign ({sign})")
         solutions = []
-        rows, cols = np.where(state.board == 0)
-        for i in range(len(rows)):
-            state_copy = copy.deepcopy(state)
-            x_pos = rows[i]
-            y_pos = cols[i]
-            state_copy.board[x_pos][y_pos] = sign
-            state_as_list = state_copy.get_board_as_list() if sign == game_state.x else state_copy.get_board_negative_as_list()
-            prediction = self.cart.predict([state_as_list])
-            solutions.append(Solution(state_copy, x_pos, y_pos, prediction))
 
-        max_solution = max(solutions, key=attrgetter('prediction'))
+        if possible_moves:
+            for pos_move in possible_moves:
+                state_as_list = pos_move.get_board_as_list() if sign == game_state.x else pos_move.get_board_negative_as_list()
+                prediction = self.cart.predict([state_as_list])
+                solutions.append({'move': pos_move, 'prediction': prediction})
 
-        state.board[max_solution.pos_x][max_solution.pos_y] = sign
-        return state
+            max_solution = max(solutions, key=lambda x: x['prediction'])
+            return max_solution['move']
+        else:
+            rows, cols = np.where(state.board == 0)
+            for i in range(len(rows)):
+                state_copy = copy.deepcopy(state)
+                x_pos = rows[i]
+                y_pos = cols[i]
+                state_copy.board[x_pos][y_pos] = sign
+                state_as_list = state_copy.get_board_as_list() if sign == game_state.x else state_copy.get_board_negative_as_list()
+                prediction = self.cart.predict([state_as_list])
+                solutions.append(Solution(state_copy, x_pos, y_pos, prediction))
+
+            # if len(solutions) == 0: return possible_moves[0]
+            max_solution = max(solutions, key=attrgetter('prediction'))
+
+            state.board[max_solution.pos_x][max_solution.pos_y] = sign
+            return state
 
     def create_cart(self, iter_count, agent):
         print("CREATING DATASET...")

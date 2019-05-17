@@ -105,6 +105,7 @@ def choose_action(q_table, obs, agent, opponent_sign):
     action_idx = np.random.choice(np.argwhere(~np.isnan(values)).flatten())
     obses_possible_after_action = value_obses[action_idx][1]
     trans_state = value_obses[action_idx][2]
-    obs_after_random_opponent_play = agent.perform_move(trans_state, opponent_sign, obses_possible_after_action)
+    obs_after_random_opponent_play = agent.perform_move(trans_state, opponent_sign, obses_possible_after_action,
+                                                        validate=False)
 
     return action_idx, obs_after_random_opponent_play, trans_state

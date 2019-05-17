@@ -13,7 +13,7 @@ def play(playerX, playerO):
 
 # TODO extract to separate file
 def test(playerX, playerO):
-    repetitions = 100
+    repetitions = 10000
     results = defaultdict(int)
 
     for _ in tqdm(range(0, repetitions)):
@@ -31,14 +31,50 @@ def test(playerX, playerO):
     print(f"draw {d} times {(d / all) * 100}%")
 
 
+
 random_player = RandomPlayer()
 win_selecting_player = WinSelectingPlayer()
-q_player = QPlayer(win_selecting_player)
-cart_player = CartPlayer(100000, win_selecting_player)
-print("TESTING...")
-test(win_selecting_player, cart_player)
-test(win_selecting_player, q_player)
-test(cart_player, random_player)
-test(random_player, cart_player)
-test(q_player, RandomPlayer())
-test(RandomPlayer(), q_player)
+q_player_random = QPlayer(random_player)
+cart_player_random = CartPlayer(100000, random_player)
+
+test(q_player_random, cart_player_random)
+test(cart_player_random, q_player_random)
+
+
+
+
+
+
+
+q_player_random = QPlayer(random_player)
+# cart_player_random = CartPlayer(100000, random_player) #todo change
+
+# todo error on q_player:22 when qplayer is O, also in qtable there are invalid links to next moves (None)
+cart_player_q_learn = CartPlayer(100000, q_player_random)
+q_player_cart = QPlayer(cart_player_random)
+
+print("TESTING SELECTING vs RANDOM")
+test(win_selecting_player, random_player)
+test(random_player, win_selecting_player)
+
+
+print("TESTING Q-LEARN vs RANDOM")
+test(q_player_random, random_player)
+test(random_player, q_player_random)
+print("TESTING CART vs RANDOM")
+test(cart_player_random, random_player)
+test(random_player, cart_player_random)
+print("TESTING Q-LEARN vs CART")
+test(q_player_random, cart_player_random)
+test(cart_player_random, q_player_random)
+
+
+print("TESTING Q-LEARN+ vs RANDOM")
+test(q_player_cart, random_player)
+test(random_player, q_player_cart)
+print("TESTING CART+ vs RANDOM")
+test(cart_player_q_learn, random_player)
+test(random_player, cart_player_q_learn)
+print("TESTING Q-LEARN+ vs CART+")
+test(q_player_cart, cart_player_q_learn)
+test(cart_player_q_learn, q_player_cart)

@@ -8,8 +8,17 @@ class GameState:
 
     def __init__(self):
         self.board = np.zeros((3, 3))
-        self.negative_fun_vec = np.vectorize(lambda e: -e if e in [x,o] else e)
+        # self.negative_fun_vec = np.vectorize(lambda e: -e if e in [x, o] else e)
         self.turn = x
+
+    def negative_fun_vec(self, state):
+        return np.vectorize(lambda e: -e if e in [x, o] else e)(state)
+
+    def is_valid_for(self, opponent_sign):
+        flat = self.board.flatten().tolist()
+        x_count = flat.count(x)
+        o_count = flat.count(o)
+        return x_count >= o_count if opponent_sign == x else x_count > o_count
 
     def get_winner(self):
         """ 1 is cross, -1 is circle, 0 is draw"""
